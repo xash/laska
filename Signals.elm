@@ -18,7 +18,6 @@ transform (wx, wy) (mx, my) =
 
 clickedOn : Signal (Maybe Point)
 clickedOn = lift2 transform Window.dimensions clicked |>
-            --keepIf (\(x,y) -> x > 0 && y > 0) |>
             lift (\(x,y) -> (7-(y `div` space), (x `div` space))) |>
             lift (\c -> if onBoard c then Just c else Nothing) |>
             lift3 (\no mouse click -> if mouse then click else no)

@@ -10,53 +10,58 @@ import open Draw
 import open Signals
 import open Helper
 
--- Main part
 main = lift2 draw Window.dimensions gameLoop
 
 gameLoop : Signal Game
 gameLoop = foldp update (Turn (Own, MustMove), startField) clickedOn
 
 update : Maybe Point -> Game -> Game
-update click (state, board) =
-  let old = (state, board)
+update click (state, b) =
+  let old = (state, b)
   in case (click, state) of
-    (_, Won player) -> old
-    (_, Turn (Enemy, _)) -> nextStep (enemyClick old) old
-    (Nothing, _) -> old    
+    (_, Turn (Enemy, _))        -> nextStep (enemyClick old) old
     (Just click, Turn (Own, _)) -> nextStep click old
+    otherwise -> old
 
 nextStep : Point -> Game -> Game
-nextStep click (state, board) =
-  let old = (state, board)    
+nextStep click (state, b) =
+  let old = (state, b)    
   in case state of
-    Turn (player, MustMove) -> 
-      if owner board click == Just player && canMove board click
-      then (Turn (player, FromMove click), board) else old
-    Turn (player, FromMove from) ->
-      if canMoveTo board from click 
-      then newGame moved old from click else old    
-    Turn (player, MustJump) ->
-      if owner board click == Just player && canJump board [] click
-      then (Turn (player, FromJump [] click), board) else old
-    Turn (player, FromJump over from) ->
-      if canJumpTo board over from click
-      then newGame jumped old from click else old
+    Turn (p, MustMove) -> 
+      if owner b click == Just p && canMove b click
+      then (Turn (p, FromMove click), b) else old
+    Turn (p, FromMove from) ->
+        if | canMoveTo b from click -> 
+             newGame moved old from click 
+           | owner b click == Just p && canMove b click ->
+             (Turn (p, FromMove click), b)
+           | otherwise -> 
+             old
+    Turn (p, MustJump) ->
+      if owner b click == Just p && canJump b [] click
+      then (Turn (p, FromJump [] click), b) else old
+    Turn (p, FromJump over from) ->
+      if | canJumpTo b over from click ->
+             newGame jumped old from click
+         | isEmpty over && owner b click == Just p && canJump b [] click ->
+             (Turn (p, FromMove click), b)
+         | otherwise ->
+             old
 
-newGame f (state, board) from to =
-  let newBoard = f board from to |> makeGenerals
+newGame f (state, b) from to =
+  let newBoard = f b from to |> makeGenerals
   in (newState (state, newBoard) to, newBoard)
 
 newState : Game -> Point -> State
-newState (Turn (player, action), board) click =
-  let otherPnts = Dict.toList board |>
-                     filter (\(pnt, pillar) -> owner board pnt == Just (other player)) |>
-                     map (\(pnt, pillar) -> pnt)
-      otherMove = if | any (canJump board []) otherPnts -> Turn (other player, MustJump)
-                     | any (canMove board) otherPnts -> Turn (other player, MustMove)
-                     | otherwise -> Won player
+newState (Turn (p, action), b) click =
+  let otherPnts = Dict.keys b |>
+                  filter (\pnt -> owner b pnt == Just (other p))
+      otherMove = if | any (canJump b []) otherPnts -> Turn (other p, MustJump)
+                     | any (canMove b) otherPnts    -> Turn (other p, MustMove)
+                     | otherwise                    -> Won p
   in case action of
-    FromJump over fromJump ->
-      if newPlace click fromJump |> canJump board (click::over)
-      then Turn (player, FromJump (click::over) (newPlace click fromJump))
+    FromJump jumped from ->
+      if afterJump from click |> canJump b (click::jumped)
+      then Turn (p, FromJump (click::jumped) (afterJump from click))
       else otherMove
     FromMove _ -> otherMove     

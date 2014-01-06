@@ -5,82 +5,82 @@ import Dict
 import open Types
 import open Helper
 
+afterJump (x,y) (a,b) = (a+(a-x), b+(b-y))
+
 boardPoints : [Point]
-boardPoints =
-  let points = concatMap (\x -> map (\y -> (x,y)) [0..6]) [0..6]
-  in filter (\(x,y) -> isEven (x+y)) points
+boardPoints = concatMap (\x -> map (\y -> (x,y)) [0..6]) [0..6] |>
+              filter (\(x,y) -> isEven (x+y))
 
 onBoard : Point -> Bool
 onBoard pnt = pnt `elem` boardPoints
 
 startField : Board
-startField = (map (\pnt -> (pnt, [ (Own, Peasant)])) (take 11 boardPoints) ++
-             map (\pnt -> (pnt, [ (Enemy, Peasant)])) (drop 14 boardPoints)) |>
-             Dict.fromList
+startField = 
+  zip (take 11 boardPoints ++ drop 14 boardPoints)
+      (repeat 11 [(Own, Peasant)] ++ repeat 11 [(Enemy, Peasant)])
+  |> Dict.fromList
+
+owner : Board -> Point -> Maybe Player
+owner b pnt =
+ case Dict.lookup pnt b of
+   Nothing -> Nothing
+   Just pillar -> Just (head pillar |> fst)
 
 directions : Board -> Point -> [Point]
-directions board pnt = map (addTuple pnt) <|
+directions board pnt = filter onBoard <| map (addTuple pnt) <|
   case Dict.lookup pnt board
-  of Nothing -> []
-     Just ((Own, Peasant)::s) -> [(1,-1), (1,1)]
-     Just ((Enemy, Peasant)::s) -> [(-1,-1),(-1,1)]
-     Just ((_, General)::s) -> [(1,-1), (1,1), (-1,-1),(-1,1)]
+  of Just ((Own, Peasant)::s)   -> [(1,-1), (1,1)]
+     Just ((Enemy, Peasant)::s) -> [(-1,-1), (-1,1)]
+     Just ((_, General)::s)     -> [(1,-1), (1,1), (-1,-1), (-1,1)]
+     otherwise -> []
 
 canMoveTo : Board -> Point -> Point -> Bool
-canMoveTo board pnt to = (to `elem` (directions board pnt)) &&
-                         onBoard to && (not <| Dict.member to board)
+canMoveTo b from to = to `elem` directions b from &&
+                      not (Dict.member to b)
 
 canJumpTo : Board -> [Point] -> Point -> Point -> Bool
-canJumpTo board over pnt to =
-  let ownPillar = Dict.findWithDefault [] pnt board
-  in  (not <| to `elem` over) &&
-      (to `elem` (directions board pnt)) &&
-      onBoard to && onBoard (newPlace to pnt) &&
-      canMoveTo (Dict.insert to ownPillar board) to (newPlace to pnt) &&
-      (case (owner board pnt, owner board to) of
-        (_, Nothing) -> False
-        (Nothing, _) -> False
+canJumpTo b jumped from to =
+  let ownPillar = Dict.findWithDefault [] from b
+  in  not (to `elem` jumped) &&
+      to `elem` directions b from &&
+      onBoard (afterJump from to) &&
+      canMoveTo (Dict.insert to ownPillar b) to (afterJump from to) &&
+      case (owner b from, owner b to) of
         (Just Own, Just Enemy) -> True
         (Just Enemy, Just Own) -> True
-        otherwise -> False)
+        otherwise -> False
 
 canMove : Board -> Point -> Bool
-canMove board pnt =
-  directions board pnt |> any (canMoveTo board pnt)
+canMove b from =
+  directions b from |> any (canMoveTo b from)
 
 canJump : Board -> [Point] -> Point -> Bool
-canJump board over pnt =
-  directions board pnt |> any (canJumpTo board over pnt)
+canJump b jumped from =
+  directions b from |> any (canJumpTo b jumped from)
 
 moved : Board -> Point -> Point -> Board
-moved board pnt to =
-  case Dict.lookup pnt board of
-    Nothing -> board
-    Just pillar -> Dict.remove pnt board |> Dict.insert to pillar
+moved b from to =
+  case Dict.lookup from b of
+    Nothing     -> b
+    Just pillar -> b |> Dict.remove from 
+                     |> Dict.insert to pillar
 
 jumped : Board -> Point -> Point -> Board
-jumped board from over =
-  let to = newPlace over from
-  in
-      case (Dict.lookup from board, Dict.lookup over board)  of
-        (_, Nothing) -> board
-        (Nothing, _) -> board
-        (Just fromPillar, Just overPillar) ->
-          Dict.remove from board |>
-          Dict.remove over |>
-          Dict.insert to (fromPillar ++ [head overPillar]) |>
-          (\dict -> if length overPillar > 1
-            then Dict.insert over (tail overPillar) dict
-            else dict)
+jumped b from over =
+  case (Dict.lookup from b, Dict.lookup over b)  of
+    (Just fromPillar, Just overPillar) -> b
+      |> Dict.remove from
+      |> Dict.remove over
+      |> Dict.insert (afterJump from over) (fromPillar ++ [head overPillar]) 
+      |> if length overPillar > 1
+         then Dict.insert over (tail overPillar)
+         else id
+    otherwise -> b
 
 makeGenerals : Board -> Board
-makeGenerals board =
-  Dict.toList board |>
-  filter (\(pnt, pillar) ->
-    (owner board pnt == Just Own && pnt `elem` [(6,0),(6,2),(6,4),(6,6)]) ||
-    (owner board pnt == Just Enemy && pnt `elem` [(0,0),(0,2),(0,4),(0,6)])) |>
-  map (\(pnt, (player,_)::ps) -> (pnt,(player,General)::ps)) |>
-  foldr (\(pnt, pillar) b ->
-         (Dict.insert pnt pillar <| Dict.remove pnt b)) board
-
-
+makeGenerals b =
+  Dict.foldl (\pnt ((player,_)::ps) -> 
+    if (player == Own && pnt `elem` [(6,0),(6,2),(6,4),(6,6)]) ||
+       (player == Enemy && pnt `elem` [(0,0),(0,2),(0,4),(0,6)])
+    then Dict.insert pnt ((player, General)::ps)
+    else id) b b
