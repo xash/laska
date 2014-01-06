@@ -25,6 +25,21 @@ Elm.Types.make = function (_elm) {
    Graphics.Collage = Elm.Graphics.Collage.make(_elm);
    var Dict = Elm.Dict.make(_elm);
    var _op = {};
+   var owner = F2(function (b,
+   pnt) {
+      return function () {
+         var _v0 = A2(Dict.lookup,
+         pnt,
+         b);
+         switch (_v0.ctor)
+         {case "Just":
+            return Maybe.Just(Basics.fst(List.head(_v0._0)));
+            case "Nothing":
+            return Maybe.Nothing;}
+         _E.Case($moduleName,
+         "between lines 25 and 27");
+      }();
+   });
    var Won = function (a) {
       return {ctor: "Won",_0: a};
    };
@@ -58,6 +73,7 @@ Elm.Types.make = function (_elm) {
    };
    _elm.Types.values = {_op: _op
                        ,other: other
+                       ,owner: owner
                        ,Turn: Turn
                        ,Won: Won
                        ,MustMove: MustMove
