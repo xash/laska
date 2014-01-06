@@ -8,6 +8,7 @@ import open Ai
 import open Board
 import open Draw
 import open Signals
+import open Helper
 
 -- Main part
 main = lift2 draw Window.dimensions gameLoop
