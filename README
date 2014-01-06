@@ -1,5 +1,5 @@
-Lasca is a draughts variant where instead of removing enemy pieces, they get imprisoned under the piece that jumped them.
+Laska is a draughts variant where instead of removing enemy pieces, they get imprisoned under the piece that jumped them.
 Read more on the rules at http://www.lasca.org/ or https://en.wikipedia.org/wiki/Laska
 
 This implementation is written in Elm (http://elm-lang.org/)
-You can try the demo against a rather stupid bot at http://xashili.github.io/lasca/
+You can try the demo against a rather stupid bot at http://xashili.github.io/laska/
