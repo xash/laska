@@ -20,3 +20,10 @@ other p = case p of
   Own -> Enemy
   Enemy -> Own
 
+owner : Board -> Point -> Maybe Player
+owner b pnt =
+ case Dict.lookup pnt b of
+   Nothing -> Nothing
+   Just pillar -> Just (head pillar |> fst)
+
+

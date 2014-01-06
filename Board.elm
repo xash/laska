@@ -20,12 +20,6 @@ startField =
       (repeat 11 [(Own, Peasant)] ++ repeat 11 [(Enemy, Peasant)])
   |> Dict.fromList
 
-owner : Board -> Point -> Maybe Player
-owner b pnt =
- case Dict.lookup pnt b of
-   Nothing -> Nothing
-   Just pillar -> Just (head pillar |> fst)
-
 directions : Board -> Point -> [Point]
 directions board pnt = filter onBoard <| map (addTuple pnt) <|
   case Dict.lookup pnt board
