@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="UTF-8"><title>Helper</title><script type="text/javascript" src="/usr/share/Elm-0.10.1/elm-runtime.js"></script><script type="text/javascript">Elm.Helper = Elm.Helper || {};
+Elm.Helper.make = function (_elm) {
+   _elm.Helper = _elm.Helper || {};
+   if (_elm.Helper.values)
+   return _elm.Helper.values;
+   var N = Elm.Native,
+   _N = N.Utils.make(_elm),
+   _L = N.List.make(_elm),
+   _E = N.Error.make(_elm),
+   _J = N.JavaScript.make(_elm),
+   $moduleName = "Helper";
+   var Text = Elm.Text.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Basics = Elm.Basics.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var Prelude = Elm.Prelude.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var _op = {};
+   var subTuple = F2(function (_v0,
+   _v1) {
+      return function () {
+         switch (_v1.ctor)
+         {case "_Tuple2":
+            return function () {
+                 switch (_v0.ctor)
+                 {case "_Tuple2":
+                    return {ctor: "_Tuple2"
+                           ,_0: _v0._0 - _v1._0
+                           ,_1: _v0._1 - _v1._1};}
+                 _E.Case($moduleName,
+                 "on line 5, column 25 to 32");
+              }();}
+         _E.Case($moduleName,
+         "on line 5, column 25 to 32");
+      }();
+   });
+   var newPlace = F2(function (_v8,
+   _v9) {
+      return function () {
+         switch (_v9.ctor)
+         {case "_Tuple2":
+            return function () {
+                 switch (_v8.ctor)
+                 {case "_Tuple2":
+                    return {ctor: "_Tuple2"
+                           ,_0: _v8._0 + (_v8._0 - _v9._0)
+                           ,_1: _v8._1 + (_v8._1 - _v9._1)};}
+                 _E.Case($moduleName,
+                 "on line 9, column 25 to 40");
+              }();}
+         _E.Case($moduleName,
+         "on line 9, column 25 to 40");
+      }();
+   });
+   var isEven = function (x) {
+      return _N.eq(A2(Basics.mod,
+      x,
+      2),
+      0);
+   };
+   var find = F2(function (f,a) {
+      return function () {
+         var filtered = A2(List.filter,
+         f,
+         a);
+         return List.isEmpty(filtered) ? Maybe.Nothing : Maybe.Just(List.head(filtered));
+      }();
+   });
+   var elem = F2(function (x,a) {
+      return A2(List.any,
+      function (y) {
+         return _N.eq(x,y);
+      },
+      a);
+   });
+   var addTuple = F2(function (_v16,
+   _v17) {
+      return function () {
+         switch (_v17.ctor)
+         {case "_Tuple2":
+            return function () {
+                 switch (_v16.ctor)
+                 {case "_Tuple2":
+                    return {ctor: "_Tuple2"
+                           ,_0: _v16._0 + _v17._0
+                           ,_1: _v16._1 + _v17._1};}
+                 _E.Case($moduleName,
+                 "on line 4, column 25 to 32");
+              }();}
+         _E.Case($moduleName,
+         "on line 4, column 25 to 32");
+      }();
+   });
+   _elm.Helper.values = {_op: _op
+                        ,isEven: isEven
+                        ,addTuple: addTuple
+                        ,subTuple: subTuple
+                        ,elem: elem
+                        ,find: find
+                        ,newPlace: newPlace};
+   return _elm.Helper.values;
+};</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.Helper)</script><noscript></noscript></body></html>

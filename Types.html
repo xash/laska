@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="UTF-8"><title>Types</title><script type="text/javascript" src="/usr/share/Elm-0.10.1/elm-runtime.js"></script><script type="text/javascript">Elm.Types = Elm.Types || {};
+Elm.Types.make = function (_elm) {
+   _elm.Types = _elm.Types || {};
+   if (_elm.Types.values)
+   return _elm.Types.values;
+   var N = Elm.Native,
+   _N = N.Utils.make(_elm),
+   _L = N.List.make(_elm),
+   _E = N.Error.make(_elm),
+   _J = N.JavaScript.make(_elm),
+   $moduleName = "Types";
+   var Text = Elm.Text.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Basics = Elm.Basics.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var Prelude = Elm.Prelude.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Dict = Elm.Dict.make(_elm);
+   var _op = {};
+   var owner = F2(function (board,
+   pnt) {
+      return function () {
+         var _v0 = A2(Dict.lookup,
+         pnt,
+         board);
+         switch (_v0.ctor)
+         {case "Just":
+            return Maybe.Just(Basics.fst(List.head(_v0._0)));
+            case "Nothing":
+            return Maybe.Nothing;}
+         _E.Case($moduleName,
+         "between lines 20 and 22");
+      }();
+   });
+   var Won = function (a) {
+      return {ctor: "Won",_0: a};
+   };
+   var Turn = function (a) {
+      return {ctor: "Turn",_0: a};
+   };
+   var Peasant = {ctor: "Peasant"};
+   var Own = {ctor: "Own"};
+   var MustMove = {ctor: "MustMove"};
+   var MustJump = {ctor: "MustJump"};
+   var General = {ctor: "General"};
+   var FromMove = function (a) {
+      return {ctor: "FromMove"
+             ,_0: a};
+   };
+   var FromJump = F2(function (a,
+   b) {
+      return {ctor: "FromJump"
+             ,_0: a
+             ,_1: b};
+   });
+   var Enemy = {ctor: "Enemy"};
+   var other = function (p) {
+      return function () {
+         switch (p.ctor)
+         {case "Enemy": return Own;
+            case "Own": return Enemy;}
+         _E.Case($moduleName,
+         "between lines 25 and 27");
+      }();
+   };
+   _elm.Types.values = {_op: _op
+                       ,owner: owner
+                       ,other: other
+                       ,Turn: Turn
+                       ,Won: Won
+                       ,MustMove: MustMove
+                       ,FromMove: FromMove
+                       ,MustJump: MustJump
+                       ,FromJump: FromJump
+                       ,Own: Own
+                       ,Enemy: Enemy
+                       ,Peasant: Peasant
+                       ,General: General};
+   return _elm.Types.values;
+};</script></head><body><script type="text/javascript">Elm.fullscreen(Elm.Types)</script><noscript></noscript></body></html>
