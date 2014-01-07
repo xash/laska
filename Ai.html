@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="UTF-8"><title>Ai</title><script type="text/javascript" src="/elm-runtime.js"></script><script type="text/javascript">Elm.Ai = Elm.Ai || {};
+<html><head><meta charset="UTF-8"><title>Ai</title><script type="text/javascript" src="/usr/share/Elm-0.10.1/elm-runtime.js"></script><script type="text/javascript">Elm.Ai = Elm.Ai || {};
 Elm.Ai.make = function (_elm) {
    _elm.Ai = _elm.Ai || {};
    if (_elm.Ai.values)
@@ -33,7 +33,7 @@ Elm.Ai.make = function (_elm) {
          {case "_Tuple2":
             return function () {
                  var pnts = List.filter(function (pnt) {
-                    return _N.eq(A2(Board.owner,
+                    return _N.eq(A2(Types.owner,
                     _v0._1,
                     pnt),
                     Maybe.Just(Types.Enemy));
@@ -112,46 +112,31 @@ Elm.Board.make = function (_elm) {
    var Types = Elm.Types.make(_elm);
    var Helper = Elm.Helper.make(_elm);
    var _op = {};
-   var owner = F2(function (b,
-   pnt) {
-      return function () {
-         var _v0 = A2(Dict.lookup,
-         pnt,
-         b);
-         switch (_v0.ctor)
-         {case "Just":
-            return Maybe.Just(Basics.fst(List.head(_v0._0)));
-            case "Nothing":
-            return Maybe.Nothing;}
-         _E.Case($moduleName,
-         "between lines 25 and 27");
-      }();
-   });
    var moved = F3(function (b,
    from,
    to) {
       return function () {
-         var _v2 = A2(Dict.lookup,
+         var _v0 = A2(Dict.lookup,
          from,
          b);
-         switch (_v2.ctor)
+         switch (_v0.ctor)
          {case "Just":
             return A2(Dict.insert,
               to,
-              _v2._0)(Dict.remove(from)(b));
+              _v0._0)(Dict.remove(from)(b));
             case "Nothing": return b;}
          _E.Case($moduleName,
-         "between lines 63 and 66");
+         "between lines 57 and 60");
       }();
    });
    var makeGenerals = function (b) {
       return A3(Dict.foldl,
-      F2(function (pnt,_v4) {
+      F2(function (pnt,_v2) {
          return function () {
-            switch (_v4.ctor)
-            {case "::": switch (_v4._0.ctor)
+            switch (_v2.ctor)
+            {case "::": switch (_v2._0.ctor)
                  {case "_Tuple2":
-                    return _N.eq(_v4._0._0,
+                    return _N.eq(_v2._0._0,
                       Types.Own) && A2(Helper.elem,
                       pnt,
                       _J.toList([{ctor: "_Tuple2"
@@ -161,7 +146,7 @@ Elm.Board.make = function (_elm) {
                                 ,{ctor: "_Tuple2",_0: 6,_1: 4}
                                 ,{ctor: "_Tuple2"
                                  ,_0: 6
-                                 ,_1: 6}])) || _N.eq(_v4._0._0,
+                                 ,_1: 6}])) || _N.eq(_v2._0._0,
                       Types.Enemy) && A2(Helper.elem,
                       pnt,
                       _J.toList([{ctor: "_Tuple2"
@@ -175,22 +160,22 @@ Elm.Board.make = function (_elm) {
                       pnt,
                       {ctor: "::"
                       ,_0: {ctor: "_Tuple2"
-                           ,_0: _v4._0._0
+                           ,_0: _v2._0._0
                            ,_1: Types.General}
-                      ,_1: _v4._1}) : Basics.id;}
+                      ,_1: _v2._1}) : Basics.id;}
                  break;}
             _E.Case($moduleName,
-            "between lines 83 and 86");
+            "between lines 77 and 80");
          }();
       }),
       b,
       b);
    };
-   var boardPoints = List.filter(function (_v10) {
+   var boardPoints = List.filter(function (_v8) {
       return function () {
-         switch (_v10.ctor)
+         switch (_v8.ctor)
          {case "_Tuple2":
-            return Helper.isEven(_v10._0 + _v10._1);}
+            return Helper.isEven(_v8._0 + _v8._1);}
          _E.Case($moduleName,
          "on line 12, column 33 to 44");
       }();
@@ -213,18 +198,18 @@ Elm.Board.make = function (_elm) {
    var directions = F2(function (board,
    pnt) {
       return List.filter(onBoard)(List.map(Helper.addTuple(pnt))(function () {
-         var _v14 = A2(Dict.lookup,
+         var _v12 = A2(Dict.lookup,
          pnt,
          board);
-         switch (_v14.ctor)
+         switch (_v12.ctor)
          {case "Just":
-            switch (_v14._0.ctor)
+            switch (_v12._0.ctor)
               {case "::":
-                 switch (_v14._0._0.ctor)
+                 switch (_v12._0._0.ctor)
                    {case "_Tuple2":
-                      switch (_v14._0._0._0.ctor)
+                      switch (_v12._0._0._0.ctor)
                         {case "Enemy":
-                           switch (_v14._0._0._1.ctor)
+                           switch (_v12._0._0._1.ctor)
                              {case "Peasant":
                                 return _J.toList([{ctor: "_Tuple2"
                                                   ,_0: -1
@@ -234,7 +219,7 @@ Elm.Board.make = function (_elm) {
                                                   ,_1: 1}]);}
                              break;
                            case "Own":
-                           switch (_v14._0._0._1.ctor)
+                           switch (_v12._0._0._1.ctor)
                              {case "Peasant":
                                 return _J.toList([{ctor: "_Tuple2"
                                                   ,_0: 1
@@ -243,7 +228,7 @@ Elm.Board.make = function (_elm) {
                                                   ,_0: 1
                                                   ,_1: 1}]);}
                              break;}
-                        switch (_v14._0._0._1.ctor)
+                        switch (_v12._0._0._1.ctor)
                         {case "General":
                            return _J.toList([{ctor: "_Tuple2"
                                              ,_0: 1
@@ -291,17 +276,17 @@ Elm.Board.make = function (_elm) {
    _J.toList([{ctor: "_Tuple2"
               ,_0: Types.Enemy
               ,_1: Types.Peasant}])))));
-   var afterJump = F2(function (_v20,
-   _v21) {
+   var afterJump = F2(function (_v18,
+   _v19) {
       return function () {
-         switch (_v21.ctor)
+         switch (_v19.ctor)
          {case "_Tuple2":
             return function () {
-                 switch (_v20.ctor)
+                 switch (_v18.ctor)
                  {case "_Tuple2":
                     return {ctor: "_Tuple2"
-                           ,_0: _v21._0 + (_v21._0 - _v20._0)
-                           ,_1: _v21._1 + (_v21._1 - _v20._1)};}
+                           ,_0: _v19._0 + (_v19._0 - _v18._0)
+                           ,_1: _v19._1 + (_v19._1 - _v18._1)};}
                  _E.Case($moduleName,
                  "on line 8, column 26 to 42");
               }();}
@@ -332,25 +317,25 @@ Elm.Board.make = function (_elm) {
          A2(afterJump,
          from,
          to)) && function () {
-            var _v28 = {ctor: "_Tuple2"
-                       ,_0: A2(owner,b,from)
-                       ,_1: A2(owner,b,to)};
-            switch (_v28.ctor)
+            var _v26 = {ctor: "_Tuple2"
+                       ,_0: A2(Types.owner,b,from)
+                       ,_1: A2(Types.owner,b,to)};
+            switch (_v26.ctor)
             {case "_Tuple2":
-               switch (_v28._0.ctor)
+               switch (_v26._0.ctor)
                  {case "Just":
-                    switch (_v28._0._0.ctor)
+                    switch (_v26._0._0.ctor)
                       {case "Enemy":
-                         switch (_v28._1.ctor)
+                         switch (_v26._1.ctor)
                            {case "Just":
-                              switch (_v28._1._0.ctor)
+                              switch (_v26._1._0.ctor)
                                 {case "Own": return true;}
                                 break;}
                            break;
                          case "Own":
-                         switch (_v28._1.ctor)
+                         switch (_v26._1.ctor)
                            {case "Just":
-                              switch (_v28._1._0.ctor)
+                              switch (_v26._1._0.ctor)
                                 {case "Enemy": return true;}
                                 break;}
                            break;}
@@ -372,22 +357,22 @@ Elm.Board.make = function (_elm) {
    from,
    over) {
       return function () {
-         var _v34 = {ctor: "_Tuple2"
+         var _v32 = {ctor: "_Tuple2"
                     ,_0: A2(Dict.lookup,from,b)
                     ,_1: A2(Dict.lookup,over,b)};
-         switch (_v34.ctor)
+         switch (_v32.ctor)
          {case "_Tuple2":
-            switch (_v34._0.ctor)
+            switch (_v32._0.ctor)
               {case "Just":
-                 switch (_v34._1.ctor)
+                 switch (_v32._1.ctor)
                    {case "Just":
-                      return (_N.cmp(List.length(_v34._1._0),
+                      return (_N.cmp(List.length(_v32._1._0),
                         1) > 0 ? A2(Dict.insert,
                         over,
-                        List.tail(_v34._1._0)) : Basics.id)(A2(Dict.insert,
+                        List.tail(_v32._1._0)) : Basics.id)(A2(Dict.insert,
                         A2(afterJump,from,over),
-                        _L.append(_v34._0._0,
-                        _J.toList([List.head(_v34._1._0)])))(Dict.remove(over)(Dict.remove(from)(b))));}
+                        _L.append(_v32._0._0,
+                        _J.toList([List.head(_v32._1._0)])))(Dict.remove(over)(Dict.remove(from)(b))));}
                    break;}
               break;}
          return b;
@@ -398,7 +383,6 @@ Elm.Board.make = function (_elm) {
                        ,boardPoints: boardPoints
                        ,onBoard: onBoard
                        ,startField: startField
-                       ,owner: owner
                        ,directions: directions
                        ,canMoveTo: canMoveTo
                        ,canJumpTo: canJumpTo
@@ -523,6 +507,21 @@ Elm.Types.make = function (_elm) {
    Graphics.Collage = Elm.Graphics.Collage.make(_elm);
    var Dict = Elm.Dict.make(_elm);
    var _op = {};
+   var owner = F2(function (b,
+   pnt) {
+      return function () {
+         var _v0 = A2(Dict.lookup,
+         pnt,
+         b);
+         switch (_v0.ctor)
+         {case "Just":
+            return Maybe.Just(Basics.fst(List.head(_v0._0)));
+            case "Nothing":
+            return Maybe.Nothing;}
+         _E.Case($moduleName,
+         "between lines 25 and 27");
+      }();
+   });
    var Won = function (a) {
       return {ctor: "Won",_0: a};
    };
@@ -556,6 +555,7 @@ Elm.Types.make = function (_elm) {
    };
    _elm.Types.values = {_op: _op
                        ,other: other
+                       ,owner: owner
                        ,Turn: Turn
                        ,Won: Won
                        ,MustMove: MustMove

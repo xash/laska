@@ -73,7 +73,7 @@ Elm.Signals.make = function (_elm) {
                    ,_0: 7 - (_v8._1 / Draw.space | 0)
                    ,_1: _v8._0 / Draw.space | 0};}
          _E.Case($moduleName,
-         "on line 22, column 30 to 64");
+         "on line 21, column 30 to 64");
       }();
    })(A3(Signal.lift2,
    transform,
@@ -146,24 +146,22 @@ Elm.Draw.make = function (_elm) {
                       break;}
                  break;}
             _E.Case($moduleName,
-            "between lines 18 and 22");
+            "between lines 17 and 21");
          }();
       }();
    };
-   var drawPillar = function (pillar) {
-      return A2(List.zipWith,
+   var drawPillar = function (p) {
+      return Graphics.Collage.group(A2(List.zipWith,
       function (y) {
          return Graphics.Collage.moveY(Basics.toFloat(y) * 10);
       },
       _L.range(0,
-      30))(List.reverse(A2(List.map,
-      stoneCircle,
-      pillar)));
+      30))(List.reverse(List.map(stoneCircle)(p))));
    };
    var drawButton = F3(function (state,
-   board,
+   b,
    pnt) {
-      return function () {
+      return Graphics.Collage.group(function () {
          switch (state.ctor)
          {case "Turn":
             switch (state._0.ctor)
@@ -171,91 +169,87 @@ Elm.Draw.make = function (_elm) {
                  switch (state._0._1.ctor)
                    {case "FromJump":
                       return A4(Board.canJumpTo,
-                        board,
+                        b,
                         state._0._1._0,
                         state._0._1._1,
                         pnt) ? _J.toList([Graphics.Collage.filled(Color.red)(Graphics.Collage.circle(35))]) : _N.eq(pnt,
                         state._0._1._1) ? _J.toList([Graphics.Collage.filled(Color.yellow)(Graphics.Collage.circle(35))]) : _J.toList([]);
                       case "FromMove":
                       return A3(Board.canMoveTo,
-                        board,
+                        b,
                         state._0._1._0,
                         pnt) ? _J.toList([Graphics.Collage.filled(Color.blue)(Graphics.Collage.circle(35))]) : _N.eq(pnt,
                         state._0._1._0) ? _J.toList([Graphics.Collage.filled(Color.yellow)(Graphics.Collage.circle(35))]) : _J.toList([]);
                       case "MustJump":
                       return _N.eq(A2(Types.owner,
-                        board,
+                        b,
                         pnt),
                         Maybe.Just(state._0._0)) && A3(Board.canJump,
-                        board,
+                        b,
                         _J.toList([]),
                         pnt) ? _J.toList([Graphics.Collage.filled(Color.red)(Graphics.Collage.circle(35))]) : _J.toList([]);
                       case "MustMove":
                       return _N.eq(A2(Types.owner,
-                        board,
+                        b,
                         pnt),
                         Maybe.Just(state._0._0)) && A2(Board.canMove,
-                        board,
+                        b,
                         pnt) ? _J.toList([Graphics.Collage.filled(Color.blue)(Graphics.Collage.circle(35))]) : _J.toList([]);}
                    break;}
               break;
             case "Won":
             return _J.toList([]);}
          _E.Case($moduleName,
-         "between lines 32 and 48");
-      }();
+         "between lines 34 and 50");
+      }());
    });
    var drawBoardField = Graphics.Collage.filled(Color.brown)(Graphics.Collage.circle(30));
    var drawField = F3(function (state,
-   board,
+   b,
    pnt) {
-      return function () {
-         var pillar = A3(Dict.findWithDefault,
-         _J.toList([]),
-         pnt,
-         board);
-         return _L.append(A3(drawButton,
-         state,
-         board,
-         pnt),
-         _L.append(_J.toList([drawBoardField]),
-         drawPillar(pillar)));
-      }();
+      return Graphics.Collage.group(_J.toList([A3(drawButton,
+                                              state,
+                                              b,
+                                              pnt)
+                                              ,drawBoardField
+                                              ,drawPillar(A3(Dict.findWithDefault,
+                                              _J.toList([]),
+                                              pnt,
+                                              b))]));
    });
    var boardSize = 400;
-   var clickSpace = boardSize / 7 | 0;
    var space = boardSize / 8 | 0;
    var drawBoard = function (_v11) {
       return function () {
          switch (_v11.ctor)
          {case "_Tuple2":
             return function () {
-                 var drawPos = function (x) {
-                    return Graphics.Element.absolute(x * space);
+                 var drawPnt = function (x) {
+                    return Basics.toFloat(space * x);
                  };
                  return A2(Graphics.Collage.collage,
                  400,
-                 400)(List.concatMap(function (_v15) {
+                 400)(List.map(function (_v15) {
                     return function () {
                        switch (_v15.ctor)
                        {case "_Tuple2":
-                          return List.map(Graphics.Collage.move({ctor: "_Tuple2"
-                                                                ,_0: -150
-                                                                ,_1: -150}))(List.map(Graphics.Collage.move({ctor: "_Tuple2"
-                                                                                                            ,_0: Basics.toFloat(_v15._1 * space)
-                                                                                                            ,_1: Basics.toFloat(_v15._0 * space)}))(A3(drawField,
+                          return Graphics.Collage.move({ctor: "_Tuple2"
+                                                       ,_0: -150
+                                                       ,_1: -150})(Graphics.Collage.move({ctor: "_Tuple2"
+                                                                                         ,_0: drawPnt(_v15._1)
+                                                                                         ,_1: drawPnt(_v15._0)})(A3(drawField,
                             _v11._0,
                             _v11._1,
                             {ctor: "_Tuple2"
                             ,_0: _v15._0
                             ,_1: _v15._1})));}
                        _E.Case($moduleName,
-                       "between lines 59 and 61");
+                       "between lines 62 and 64");
                     }();
                  })(List.reverse(Board.boardPoints)));
               }();}
          _E.Case($moduleName,
-         "between lines 57 and 62");
+         "between lines 60 and 65");
       }();
    };
    var draw = F2(function (_v19,
@@ -274,18 +268,16 @@ Elm.Draw.make = function (_elm) {
                                  {case "_Tuple2":
                                     switch (_v20._0._0._0.ctor)
                                       {case "Enemy":
-                                         return "Waiting for enemy.";
-                                         case "Own":
-                                         switch (_v20._0._0._1.ctor)
-                                           {case "FromJump":
-                                              return "Choose its prey.";
-                                              case "FromMove":
-                                              return "Choose its destination.";
-                                              case "MustJump":
-                                              return "Choose which pillar shall attack.";
-                                              case "MustMove":
-                                              return "Choose which pillar to move.";}
-                                           break;}
+                                         return "Waiting for enemy.";}
+                                      switch (_v20._0._0._1.ctor)
+                                      {case "FromJump":
+                                         return "Choose its prey.";
+                                         case "FromMove":
+                                         return "Choose its destination.";
+                                         case "MustJump":
+                                         return "Choose which pillar shall attack.";
+                                         case "MustMove":
+                                         return "Choose which pillar to move.";}
                                       break;}
                                  break;
                                case "Won":
@@ -312,16 +304,15 @@ Elm.Draw.make = function (_elm) {
                                    textElement)])));
                       }();}
                  _E.Case($moduleName,
-                 "between lines 66 and 77");
+                 "between lines 68 and 79");
               }();}
          _E.Case($moduleName,
-         "between lines 66 and 77");
+         "between lines 68 and 79");
       }();
    });
    _elm.Draw.values = {_op: _op
                       ,boardSize: boardSize
                       ,space: space
-                      ,clickSpace: clickSpace
                       ,stoneCircle: stoneCircle
                       ,drawPillar: drawPillar
                       ,drawBoardField: drawBoardField
@@ -358,150 +349,104 @@ Elm.Board.make = function (_elm) {
    var Types = Elm.Types.make(_elm);
    var Helper = Elm.Helper.make(_elm);
    var _op = {};
-   var moved = F3(function (board,
-   pnt,
+   var moved = F3(function (b,
+   from,
    to) {
       return function () {
          var _v0 = A2(Dict.lookup,
-         pnt,
-         board);
+         from,
+         b);
          switch (_v0.ctor)
          {case "Just":
             return A2(Dict.insert,
               to,
-              _v0._0)(A2(Dict.remove,
-              pnt,
-              board));
-            case "Nothing": return board;}
+              _v0._0)(Dict.remove(from)(b));
+            case "Nothing": return b;}
          _E.Case($moduleName,
-         "between lines 57 and 59");
+         "between lines 57 and 60");
       }();
    });
-   var makeGenerals = function (board) {
-      return A2(List.foldr,
-      F2(function (_v14,b) {
-         return function () {
-            switch (_v14.ctor)
-            {case "_Tuple2":
-               return A2(Dict.insert,
-                 _v14._0,
-                 _v14._1)(A2(Dict.remove,
-                 _v14._0,
-                 b));}
-            _E.Case($moduleName,
-            "on line 84, column 11 to 54");
-         }();
-      }),
-      board)(List.map(function (_v6) {
-         return function () {
-            switch (_v6.ctor)
-            {case "_Tuple2":
-               switch (_v6._1.ctor)
-                 {case "::":
-                    switch (_v6._1._0.ctor)
-                      {case "_Tuple2":
-                         return {ctor: "_Tuple2"
-                                ,_0: _v6._0
-                                ,_1: {ctor: "::"
-                                     ,_0: {ctor: "_Tuple2"
-                                          ,_0: _v6._1._0._0
-                                          ,_1: Types.General}
-                                     ,_1: _v6._1._1}};}
-                      break;}
-                 break;}
-            _E.Case($moduleName,
-            "on line 82, column 35 to 59");
-         }();
-      })(List.filter(function (_v2) {
+   var makeGenerals = function (b) {
+      return A3(Dict.foldl,
+      F2(function (pnt,_v2) {
          return function () {
             switch (_v2.ctor)
-            {case "_Tuple2":
-               return _N.eq(A2(Types.owner,
-                 board,
-                 _v2._0),
-                 Maybe.Just(Types.Own)) && A2(Helper.elem,
-                 _v2._0,
-                 _J.toList([{ctor: "_Tuple2"
-                            ,_0: 6
-                            ,_1: 0}
-                           ,{ctor: "_Tuple2",_0: 6,_1: 2}
-                           ,{ctor: "_Tuple2",_0: 6,_1: 4}
-                           ,{ctor: "_Tuple2"
-                            ,_0: 6
-                            ,_1: 6}])) || _N.eq(A2(Types.owner,
-                 board,
-                 _v2._0),
-                 Maybe.Just(Types.Enemy)) && A2(Helper.elem,
-                 _v2._0,
-                 _J.toList([{ctor: "_Tuple2"
-                            ,_0: 0
-                            ,_1: 0}
-                           ,{ctor: "_Tuple2",_0: 0,_1: 2}
-                           ,{ctor: "_Tuple2",_0: 0,_1: 4}
-                           ,{ctor: "_Tuple2"
-                            ,_0: 0
-                            ,_1: 6}]));}
-            _E.Case($moduleName,
-            "between lines 80 and 81");
-         }();
-      })(Dict.toList(board))));
-   };
-   var jumped = F3(function (board,
-   from,
-   over) {
-      return function () {
-         var to = A2(Helper.newPlace,
-         over,
-         from);
-         return function () {
-            var _v18 = {ctor: "_Tuple2"
-                       ,_0: A2(Dict.lookup,from,board)
-                       ,_1: A2(Dict.lookup,
-                       over,
-                       board)};
-            switch (_v18.ctor)
-            {case "_Tuple2":
-               switch (_v18._1.ctor)
-                 {case "Nothing": return board;}
-                 switch (_v18._0.ctor)
-                 {case "Just":
-                    switch (_v18._1.ctor)
-                      {case "Just":
-                         return function (dict) {
-                              return _N.cmp(List.length(_v18._1._0),
-                              1) > 0 ? A3(Dict.insert,
-                              over,
-                              List.tail(_v18._1._0),
-                              dict) : dict;
-                           }(A2(Dict.insert,
-                           to,
-                           _L.append(_v18._0._0,
-                           _J.toList([List.head(_v18._1._0)])))(Dict.remove(over)(A2(Dict.remove,
-                           from,
-                           board))));}
-                      break;
-                    case "Nothing": return board;}
+            {case "::": switch (_v2._0.ctor)
+                 {case "_Tuple2":
+                    return _N.eq(_v2._0._0,
+                      Types.Own) && A2(Helper.elem,
+                      pnt,
+                      _J.toList([{ctor: "_Tuple2"
+                                 ,_0: 6
+                                 ,_1: 0}
+                                ,{ctor: "_Tuple2",_0: 6,_1: 2}
+                                ,{ctor: "_Tuple2",_0: 6,_1: 4}
+                                ,{ctor: "_Tuple2"
+                                 ,_0: 6
+                                 ,_1: 6}])) || _N.eq(_v2._0._0,
+                      Types.Enemy) && A2(Helper.elem,
+                      pnt,
+                      _J.toList([{ctor: "_Tuple2"
+                                 ,_0: 0
+                                 ,_1: 0}
+                                ,{ctor: "_Tuple2",_0: 0,_1: 2}
+                                ,{ctor: "_Tuple2",_0: 0,_1: 4}
+                                ,{ctor: "_Tuple2"
+                                 ,_0: 0
+                                 ,_1: 6}])) ? A2(Dict.insert,
+                      pnt,
+                      {ctor: "::"
+                      ,_0: {ctor: "_Tuple2"
+                           ,_0: _v2._0._0
+                           ,_1: Types.General}
+                      ,_1: _v2._1}) : Basics.id;}
                  break;}
             _E.Case($moduleName,
-            "between lines 65 and 74");
+            "between lines 77 and 80");
          }();
+      }),
+      b,
+      b);
+   };
+   var boardPoints = List.filter(function (_v8) {
+      return function () {
+         switch (_v8.ctor)
+         {case "_Tuple2":
+            return Helper.isEven(_v8._0 + _v8._1);}
+         _E.Case($moduleName,
+         "on line 12, column 33 to 44");
       }();
-   });
+   })(A2(List.concatMap,
+   function (x) {
+      return A2(List.map,
+      function (y) {
+         return {ctor: "_Tuple2"
+                ,_0: x
+                ,_1: y};
+      },
+      _L.range(0,6));
+   },
+   _L.range(0,6)));
+   var onBoard = function (pnt) {
+      return A2(Helper.elem,
+      pnt,
+      boardPoints);
+   };
    var directions = F2(function (board,
    pnt) {
-      return List.map(Helper.addTuple(pnt))(function () {
-         var _v23 = A2(Dict.lookup,
+      return List.filter(onBoard)(List.map(Helper.addTuple(pnt))(function () {
+         var _v12 = A2(Dict.lookup,
          pnt,
          board);
-         switch (_v23.ctor)
+         switch (_v12.ctor)
          {case "Just":
-            switch (_v23._0.ctor)
+            switch (_v12._0.ctor)
               {case "::":
-                 switch (_v23._0._0.ctor)
+                 switch (_v12._0._0.ctor)
                    {case "_Tuple2":
-                      switch (_v23._0._0._0.ctor)
+                      switch (_v12._0._0._0.ctor)
                         {case "Enemy":
-                           switch (_v23._0._0._1.ctor)
+                           switch (_v12._0._0._1.ctor)
                              {case "Peasant":
                                 return _J.toList([{ctor: "_Tuple2"
                                                   ,_0: -1
@@ -511,7 +456,7 @@ Elm.Board.make = function (_elm) {
                                                   ,_1: 1}]);}
                              break;
                            case "Own":
-                           switch (_v23._0._0._1.ctor)
+                           switch (_v12._0._0._1.ctor)
                              {case "Peasant":
                                 return _J.toList([{ctor: "_Tuple2"
                                                   ,_0: 1
@@ -520,7 +465,7 @@ Elm.Board.make = function (_elm) {
                                                   ,_0: 1
                                                   ,_1: 1}]);}
                              break;}
-                        switch (_v23._0._0._1.ctor)
+                        switch (_v12._0._0._1.ctor)
                         {case "General":
                            return _J.toList([{ctor: "_Tuple2"
                                              ,_0: 1
@@ -532,143 +477,146 @@ Elm.Board.make = function (_elm) {
                                              ,_1: 1}]);}
                         break;}
                    break;}
-              break;
-            case "Nothing":
-            return _J.toList([]);}
-         _E.Case($moduleName,
-         "between lines 23 and 27");
-      }());
+              break;}
+         return _J.toList([]);
+      }()));
    });
-   var boardPoints = function () {
-      var points = A2(List.concatMap,
-      function (x) {
-         return A2(List.map,
-         function (y) {
-            return {ctor: "_Tuple2"
-                   ,_0: x
-                   ,_1: y};
-         },
-         _L.range(0,6));
-      },
-      _L.range(0,6));
-      return A2(List.filter,
-      function (_v29) {
-         return function () {
-            switch (_v29.ctor)
-            {case "_Tuple2":
-               return Helper.isEven(_v29._0 + _v29._1);}
-            _E.Case($moduleName,
-            "on line 11, column 24 to 35");
-         }();
-      },
-      points);
-   }();
-   var onBoard = function (pnt) {
-      return A2(Helper.elem,
-      pnt,
-      boardPoints);
-   };
-   var canMoveTo = F3(function (board,
-   pnt,
+   var canMoveTo = F3(function (b,
+   from,
    to) {
       return A2(Helper.elem,
       to,
       A2(directions,
-      board,
-      pnt)) && (onBoard(to) && Basics.not(A2(Dict.member,
+      b,
+      from)) && Basics.not(A2(Dict.member,
       to,
-      board)));
+      b));
    });
-   var canJumpTo = F4(function (board,
-   over,
-   pnt,
+   var canMove = F2(function (b,
+   from) {
+      return List.any(A2(canMoveTo,
+      b,
+      from))(A2(directions,b,from));
+   });
+   var startField = Dict.fromList(A2(List.zip,
+   _L.append(A2(List.take,
+   11,
+   boardPoints),
+   A2(List.drop,14,boardPoints)),
+   _L.append(A2(List.repeat,
+   11,
+   _J.toList([{ctor: "_Tuple2"
+              ,_0: Types.Own
+              ,_1: Types.Peasant}])),
+   A2(List.repeat,
+   11,
+   _J.toList([{ctor: "_Tuple2"
+              ,_0: Types.Enemy
+              ,_1: Types.Peasant}])))));
+   var afterJump = F2(function (_v18,
+   _v19) {
+      return function () {
+         switch (_v19.ctor)
+         {case "_Tuple2":
+            return function () {
+                 switch (_v18.ctor)
+                 {case "_Tuple2":
+                    return {ctor: "_Tuple2"
+                           ,_0: _v19._0 + (_v19._0 - _v18._0)
+                           ,_1: _v19._1 + (_v19._1 - _v18._1)};}
+                 _E.Case($moduleName,
+                 "on line 8, column 26 to 42");
+              }();}
+         _E.Case($moduleName,
+         "on line 8, column 26 to 42");
+      }();
+   });
+   var canJumpTo = F4(function (b,
+   jumped,
+   from,
    to) {
       return function () {
          var ownPillar = A3(Dict.findWithDefault,
          _J.toList([]),
-         pnt,
-         board);
+         from,
+         b);
          return Basics.not(A2(Helper.elem,
          to,
-         over)) && (A2(Helper.elem,
+         jumped)) && (A2(Helper.elem,
          to,
          A2(directions,
-         board,
-         pnt)) && (onBoard(to) && (onBoard(A2(Helper.newPlace,
+         b,
+         from)) && (onBoard(A2(afterJump,
+         from,
+         to)) && (A3(canMoveTo,
+         A3(Dict.insert,to,ownPillar,b),
          to,
-         pnt)) && (A3(canMoveTo,
-         A3(Dict.insert,
-         to,
-         ownPillar,
-         board),
-         to,
-         A2(Helper.newPlace,
-         to,
-         pnt)) && function () {
-            var _v33 = {ctor: "_Tuple2"
-                       ,_0: A2(Types.owner,board,pnt)
-                       ,_1: A2(Types.owner,board,to)};
-            switch (_v33.ctor)
+         A2(afterJump,
+         from,
+         to)) && function () {
+            var _v26 = {ctor: "_Tuple2"
+                       ,_0: A2(Types.owner,b,from)
+                       ,_1: A2(Types.owner,b,to)};
+            switch (_v26.ctor)
             {case "_Tuple2":
-               switch (_v33._1.ctor)
-                 {case "Nothing": return false;}
-                 switch (_v33._0.ctor)
+               switch (_v26._0.ctor)
                  {case "Just":
-                    switch (_v33._0._0.ctor)
+                    switch (_v26._0._0.ctor)
                       {case "Enemy":
-                         switch (_v33._1.ctor)
+                         switch (_v26._1.ctor)
                            {case "Just":
-                              switch (_v33._1._0.ctor)
+                              switch (_v26._1._0.ctor)
                                 {case "Own": return true;}
                                 break;}
                            break;
                          case "Own":
-                         switch (_v33._1.ctor)
+                         switch (_v26._1.ctor)
                            {case "Just":
-                              switch (_v33._1._0.ctor)
+                              switch (_v26._1._0.ctor)
                                 {case "Enemy": return true;}
                                 break;}
                            break;}
-                      break;
-                    case "Nothing": return false;}
+                      break;}
                  break;}
             return false;
-         }()))));
+         }())));
       }();
    });
-   var canJump = F3(function (board,
-   over,
-   pnt) {
+   var canJump = F3(function (b,
+   jumped,
+   from) {
       return List.any(A3(canJumpTo,
-      board,
-      over,
-      pnt))(A2(directions,board,pnt));
+      b,
+      jumped,
+      from))(A2(directions,b,from));
    });
-   var canMove = F2(function (board,
-   pnt) {
-      return List.any(A2(canMoveTo,
-      board,
-      pnt))(A2(directions,board,pnt));
+   var jumped = F3(function (b,
+   from,
+   over) {
+      return function () {
+         var _v32 = {ctor: "_Tuple2"
+                    ,_0: A2(Dict.lookup,from,b)
+                    ,_1: A2(Dict.lookup,over,b)};
+         switch (_v32.ctor)
+         {case "_Tuple2":
+            switch (_v32._0.ctor)
+              {case "Just":
+                 switch (_v32._1.ctor)
+                   {case "Just":
+                      return (_N.cmp(List.length(_v32._1._0),
+                        1) > 0 ? A2(Dict.insert,
+                        over,
+                        List.tail(_v32._1._0)) : Basics.id)(A2(Dict.insert,
+                        A2(afterJump,from,over),
+                        _L.append(_v32._0._0,
+                        _J.toList([List.head(_v32._1._0)])))(Dict.remove(over)(Dict.remove(from)(b))));}
+                   break;}
+              break;}
+         return b;
+      }();
    });
-   var startField = Dict.fromList(_L.append(A2(List.map,
-   function (pnt) {
-      return {ctor: "_Tuple2"
-             ,_0: pnt
-             ,_1: _J.toList([{ctor: "_Tuple2"
-                             ,_0: Types.Own
-                             ,_1: Types.Peasant}])};
-   },
-   A2(List.take,11,boardPoints)),
-   A2(List.map,
-   function (pnt) {
-      return {ctor: "_Tuple2"
-             ,_0: pnt
-             ,_1: _J.toList([{ctor: "_Tuple2"
-                             ,_0: Types.Enemy
-                             ,_1: Types.Peasant}])};
-   },
-   A2(List.drop,14,boardPoints))));
    _elm.Board.values = {_op: _op
+                       ,afterJump: afterJump
                        ,boardPoints: boardPoints
                        ,onBoard: onBoard
                        ,startField: startField
@@ -724,24 +672,6 @@ Elm.Helper.make = function (_elm) {
          "on line 5, column 25 to 32");
       }();
    });
-   var newPlace = F2(function (_v8,
-   _v9) {
-      return function () {
-         switch (_v9.ctor)
-         {case "_Tuple2":
-            return function () {
-                 switch (_v8.ctor)
-                 {case "_Tuple2":
-                    return {ctor: "_Tuple2"
-                           ,_0: _v8._0 + (_v8._0 - _v9._0)
-                           ,_1: _v8._1 + (_v8._1 - _v9._1)};}
-                 _E.Case($moduleName,
-                 "on line 9, column 25 to 40");
-              }();}
-         _E.Case($moduleName,
-         "on line 9, column 25 to 40");
-      }();
-   });
    var isEven = function (x) {
       return _N.eq(A2(Basics.mod,
       x,
@@ -763,17 +693,17 @@ Elm.Helper.make = function (_elm) {
       },
       a);
    });
-   var addTuple = F2(function (_v16,
-   _v17) {
+   var addTuple = F2(function (_v8,
+   _v9) {
       return function () {
-         switch (_v17.ctor)
+         switch (_v9.ctor)
          {case "_Tuple2":
             return function () {
-                 switch (_v16.ctor)
+                 switch (_v8.ctor)
                  {case "_Tuple2":
                     return {ctor: "_Tuple2"
-                           ,_0: _v16._0 + _v17._0
-                           ,_1: _v16._1 + _v17._1};}
+                           ,_0: _v8._0 + _v9._0
+                           ,_1: _v8._1 + _v9._1};}
                  _E.Case($moduleName,
                  "on line 4, column 25 to 32");
               }();}
@@ -786,8 +716,7 @@ Elm.Helper.make = function (_elm) {
                         ,addTuple: addTuple
                         ,subTuple: subTuple
                         ,elem: elem
-                        ,find: find
-                        ,newPlace: newPlace};
+                        ,find: find};
    return _elm.Helper.values;
 };Elm.Types = Elm.Types || {};
 Elm.Types.make = function (_elm) {
@@ -815,19 +744,19 @@ Elm.Types.make = function (_elm) {
    Graphics.Collage = Elm.Graphics.Collage.make(_elm);
    var Dict = Elm.Dict.make(_elm);
    var _op = {};
-   var owner = F2(function (board,
+   var owner = F2(function (b,
    pnt) {
       return function () {
          var _v0 = A2(Dict.lookup,
          pnt,
-         board);
+         b);
          switch (_v0.ctor)
          {case "Just":
             return Maybe.Just(Basics.fst(List.head(_v0._0)));
             case "Nothing":
             return Maybe.Nothing;}
          _E.Case($moduleName,
-         "between lines 20 and 22");
+         "between lines 25 and 27");
       }();
    });
    var Won = function (a) {
@@ -858,12 +787,12 @@ Elm.Types.make = function (_elm) {
          {case "Enemy": return Own;
             case "Own": return Enemy;}
          _E.Case($moduleName,
-         "between lines 25 and 27");
+         "between lines 19 and 21");
       }();
    };
    _elm.Types.values = {_op: _op
-                       ,owner: owner
                        ,other: other
+                       ,owner: owner
                        ,Turn: Turn
                        ,Won: Won
                        ,MustMove: MustMove

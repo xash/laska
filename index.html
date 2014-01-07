@@ -46,7 +46,7 @@ Elm.Main.make = function (_elm) {
                    {case "_Tuple2":
                       return function () {
                            var otherPnts = List.filter(function (pnt) {
-                              return _N.eq(A2(Board.owner,
+                              return _N.eq(A2(Types.owner,
                               _v0._1,
                               pnt),
                               Maybe.Just(Types.other(_v0._0._0._0)));
@@ -140,7 +140,7 @@ Elm.Main.make = function (_elm) {
                                    Board.jumped,
                                    old,
                                    _v15._0._0._1._1,
-                                   click) : List.isEmpty(_v15._0._0._1._0) && (_N.eq(A2(Board.owner,
+                                   click) : List.isEmpty(_v15._0._0._1._0) && (_N.eq(A2(Types.owner,
                                    _v15._1,
                                    click),
                                    Maybe.Just(_v15._0._0._0)) && A3(Board.canJump,
@@ -159,7 +159,7 @@ Elm.Main.make = function (_elm) {
                                    Board.moved,
                                    old,
                                    _v15._0._0._1._0,
-                                   click) : _N.eq(A2(Board.owner,
+                                   click) : _N.eq(A2(Types.owner,
                                    _v15._1,
                                    click),
                                    Maybe.Just(_v15._0._0._0)) && A2(Board.canMove,
@@ -170,7 +170,7 @@ Elm.Main.make = function (_elm) {
                                                             ,_1: Types.FromMove(click)})
                                             ,_1: _v15._1} : old;
                                  case "MustJump":
-                                 return _N.eq(A2(Board.owner,
+                                 return _N.eq(A2(Types.owner,
                                    _v15._1,
                                    click),
                                    Maybe.Just(_v15._0._0._0)) && A3(Board.canJump,
@@ -184,7 +184,7 @@ Elm.Main.make = function (_elm) {
                                                             click)})
                                             ,_1: _v15._1} : old;
                                  case "MustMove":
-                                 return _N.eq(A2(Board.owner,
+                                 return _N.eq(A2(Types.owner,
                                    _v15._1,
                                    click),
                                    Maybe.Just(_v15._0._0._0)) && A2(Board.canMove,
@@ -305,7 +305,7 @@ Elm.Ai.make = function (_elm) {
          {case "_Tuple2":
             return function () {
                  var pnts = List.filter(function (pnt) {
-                    return _N.eq(A2(Board.owner,
+                    return _N.eq(A2(Types.owner,
                     _v0._1,
                     pnt),
                     Maybe.Just(Types.Enemy));
